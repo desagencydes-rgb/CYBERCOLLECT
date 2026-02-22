@@ -1,25 +1,22 @@
 # 🛰️ CyberCollect – Free Deployment Guide ($0 total)
 
-## Option A – Render.com (Recommended, 100% Free)
+## Option A – Hugging Face Spaces (Recommended, No Credit Card Required)
 
-**Prerequisites:** GitHub account, this repo pushed to GitHub.
+Hugging Face provides free Docker hosting (16GB RAM, 2 CPUs) with a simple GitHub connection.
 
-### Steps
+1. Create a free account at [huggingface.co](https://huggingface.co/).
+2. Go to your Profile and click **New Space**.
+3. Name your space (e.g., `CyberCollect`).
+4. Under "Select the Space SDK", click **Docker** → **Blank**.
+5. Choose "Public" and click **Create Space**.
+6. Follow the instructions to link your GitHub repository to the Space (you can directly sync it by pushing to their remote URL or uploading the files).
+7. Hugging Face will automatically read the `Dockerfile`, build the image, and serve it. 
 
-1. **Fork/push** this repo to your GitHub account.
-2. Go to [render.com](https://render.com) → Sign up (free, no credit card).
-3. Click **"New +"** → **"Web Service"**.
-4. Connect your GitHub repo.
-5. Render auto-detects `render.yaml` and configures everything.
-6. Click **"Create Web Service"** → Done! 🎉
-
-Your app will be live at: `https://cybercollect.onrender.com` (or similar).
-
-> **Note on AI Chat:** Render's free tier does not have enough compute to run Ollama.
-> The AI chat will auto-detect this and tell you. If you upgrade to a paid instance,
-> or run the app locally, the full AI chat activates automatically — no config needed.
+Your app will be live at: `https://huggingface.co/spaces/your-username/CyberCollect`
 
 ---
+
+## Option B – Render.com (Requires Credit Card for some verifications)
 
 ## Option B – Run Locally (Full Features including AI Chat)
 
