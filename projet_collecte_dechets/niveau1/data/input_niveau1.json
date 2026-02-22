@@ -1,0 +1,20 @@
+{
+    "depot": {
+        "id": 0,
+        "x": 0,
+        "y": 0,
+        "nom": "Centre de traitement"
+    },
+    "points_collecte": [
+        { "id": 1, "x": 2.5, "y": 3.1, "nom": "Quartier Nord" },
+        { "id": 2, "x": 5.2, "y": 4.8, "nom": "Centre Ville" },
+        { "id": 3, "x": 7.8, "y": 1.2, "nom": "Zone Industrielle" }
+    ],
+    "connexions": [
+        { "depart": 0, "arrivee": 1, "distance": null },
+        { "depart": 1, "arrivee": 2, "distance": 4.2 },
+        { "depart": 2, "arrivee": 3, "distance": null },
+        { "depart": 0, "arrivee": 2, "distance": null }, 
+        { "depart": 1, "arrivee": 3, "distance": null }
+    ]
+}

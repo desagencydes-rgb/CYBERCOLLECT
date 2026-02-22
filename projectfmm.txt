@@ -1,0 +1,1754 @@
+Cahier des Charges : Système d’Optimisation des
+Tournées de Collecte
+Département de Génie Informatique
+Projet de Fin de Module
+Année Universitaire 2025-2026
+Table des matières
+1 Introduction Générale
+1.1 Contexte du Problème . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.2 Objectif du Projet . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+1.3 Architecture Globale . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .4
+4
+4
+4
+2 Niveau 1 : Modèle de Base - Réseau Routier
+2.1 Objectif du Niveau . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.2 Modèle Mathématique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.3 Classes à Implémenter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.3.1 Classe PointCollecte . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.3.2 Classe GrapheRoutier . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.4 Fichiers d’Entrée/Sortie . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+2.4.1 Fichier d’Entrée : input_niveau1.json . . . . . . . . . . . . . . . .
+2.4.2 Fichier de Sortie : output_niveau1.json . . . . . . . . . . . . . . . .
+2.5 Tests de Validation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .5
+5
+5
+5
+5
+5
+6
+6
+6
+7
+3 Niveau 2 : Affectation Camion ↔ Zone
+3.1 Objectif du Niveau . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.2 Modèle Mathématique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.3 Classes à Implémenter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.3.1 Classe Camion . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.3.2 Classe Zone . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.3.3 Classe AffectateurBiparti . . . . . . . . . . . . . . . . . . . . . . .
+3.4 Fichiers d’Entrée/Sortie . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3.4.1 Fichier d’Entrée : input_niveau2.json . . . . . . . . . . . . . . . .
+3.4.2 Fichier de Sortie : output_niveau2.json . . . . . . . . . . . . . . . .
+3.5 Tests de Validation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .7
+7
+7
+7
+7
+8
+8
+8
+8
+9
+10
+14 Niveau 3 : Modèle Temporel Camion ↔ Zone ↔ Créneau
+4.1 Objectif du Niveau . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+4.2 Modèle Mathématique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+4.3 Classes à Implémenter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+4.3.1 Classe CreneauHoraire . . . . . . . . . . . . . . . . . . . . . . . . .
+4.3.2 Classe ContrainteTemporelle . . . . . . . . . . . . . . . . . . . . .
+4.3.3 Classe PlanificateurTriparti . . . . . . . . . . . . . . . . . . . . .
+4.4 Fichiers d’Entrée/Sortie . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+4.4.1 Fichier d’Entrée : input_niveau3.json . . . . . . . . . . . . . . . .
+4.4.2 Fichier de Sortie : output_niveau3.json . . . . . . . . . . . . . . . .
+4.5 Tests de Validation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .10
+10
+10
+10
+10
+11
+11
+11
+11
+12
+13
+5 Niveau 4 : VRP Enrichi avec Points Réels
+5.1 Objectif du Niveau . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+5.2 Modèle Mathématique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+5.3 Classes à Implémenter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+5.3.1 Classe Tournee . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+5.3.2 Classe OptimiseurVRP . . . . . . . . . . . . . . . . . . . . . . . . . .
+5.3.3 Classe VisualiseurTournees . . . . . . . . . . . . . . . . . . . . . .
+5.4 Fichiers d’Entrée/Sortie . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+5.4.1 Fichier d’Entrée : input_niveau4.json . . . . . . . . . . . . . . . .
+5.4.2 Fichier de Sortie : output_niveau4.json . . . . . . . . . . . . . . . .
+5.5 Tests de Validation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .13
+13
+13
+13
+13
+14
+14
+15
+15
+15
+16
+6 Niveau 5 : Système Dynamique Multi-Critères
+6.1 Objectif du Niveau . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+6.2 Modèle Mathématique . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+6.3 Classes à Implémenter . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+6.3.1 Classe CapteurIoT . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+6.3.2 Classe SimulateurTempsReel . . . . . . . . . . . . . . . . . . . . . .
+6.3.3 Classe OptimiseurMultiObjectif . . . . . . . . . . . . . . . . . . .
+6.3.4 Classe DashboardTempsReel . . . . . . . . . . . . . . . . . . . . . . .
+6.4 Fichiers d’Entrée/Sortie . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+6.4.1 Fichier d’Entrée : input_niveau5.json . . . . . . . . . . . . . . . .
+6.4.2 Fichier de Sortie : output_niveau5.json . . . . . . . . . . . . . . . .
+6.5 Tests de Validation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .16
+16
+16
+17
+17
+17
+18
+18
+19
+19
+20
+21
+7 Stratégie de Développement et Livrables
+7.1 Arborescence du Projet . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+7.2 Plan de Développement par Itérations . . . . . . . . . . . . . . . . . . . . . .
+7.3 Barème d’Évaluation . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+7.4 Réutilisation entre Niveaux . . . . . . . . . . . . . . . . . . . . . . . . . . .21
+21
+23
+23
+23
+28 Annexe : Guide d’Implémentation
+8.1 Installation Environnement . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+8.2 Modèles de Données de Référence . . . . . . . . . . . . . . . . . . . . . . . .
+8.3 Questions de Vérification par Niveau . . . . . . . . . . . . . . . . . . . . . .
+8.3.1 Niveau 1 - Questions Fondamentales . . . . . . . . . . . . . . . . . .
+8.3.2 Niveau 2 - Questions d’Affectation . . . . . . . . . . . . . . . . . . .
+8.3.3 Niveau 3 - Questions Temporelles . . . . . . . . . . . . . . . . . . . .
+8.3.4 Niveau 4 - Questions d’Optimisation . . . . . . . . . . . . . . . . . .
+8.3.5 Niveau 5 - Questions Dynamiques . . . . . . . . . . . . . . . . . . . .
+8.4 Exemple d’Exécution Complète . . . . . . . . . . . . . . . . . . . . . . . . .
+8.5 Ressources et Références . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+3
+24
+24
+24
+24
+24
+25
+25
+25
+25
+25
+261Introduction Générale
+1.1Contexte du Problème
+La ville de VillePropre souhaite optimiser son système de collecte des déchets ménagers.
+Actuellement, 5 camions parcourent la ville sans planification optimale, entraînant :
+— Des surcoûts en carburant (environ 30% au-dessus des benchmarks)
+— Une usure prématurée des véhicules
+— Des retards de collecte dans certains quartiers
+— Des plaintes citoyennes pour nuisances sonores
+1.2
+Objectif du Projet
+Développer un système d’optimisation progressif en 5 niveaux, chaque niveau correspon-
+dant à un livrable fonctionnel indépendant mais intégré dans une architecture cohérente.
+1.3
+Architecture Globale
+Niveau 1Modèle de Base
+Progression des fonctionnali-
+tés :
+→ Chaque niveau ajoute une
+complexité
+→ Architecture modulaire
+→ Tests indépendants par ni-
+veau
++ Affectation
+Niveau 2Affectation Camion ↔ Zone
++ Temps
+Niveau 3Camion ↔ Zone ↔ Créneau
++ Trajets détaillés
+Niveau 4VRP Enrichi
++ Adaptabilité
+Niveau 5Système Dynamique
+Figure 1 – Architecture en 5 niveaux du système
+42Niveau 1 : Modèle de Base - Réseau Routier
+2.1Objectif du Niveau
+Calculer les distances optimales entre points de collecte en modélisant le réseau
+routier comme un graphe 1-partie.
+2.2
+Modèle Mathématique
+— Graphe : G = (V, E)
+— Sommets : V = {v0 , v1 , . . . , vn } (dépôt + points de collecte)
+— Arêtes : E = {(vi , vj ) | chemin direct existe}
+— Pondération : w(vi , vj ) = distance euclidienne(vi , vj )
+2.3Classes à Implémenter
+2.3.1Classe PointCollecte
+Listing 1 – Structure d’un point de collecte
+class PointCollecte :
+def __init__ ( self , id_point : int , x : float , y : float ,
+nom : str = " " ) :
+self . id = id_point
+# Identifiant unique
+self . x = x
+# Coordonnee X
+self . y = y
+# Coordonnee Y
+self . nom = nom
+# Nom du point ( optionnel )
+1
+2
+3
+4
+5
+6
+7
+8
+def distance_vers ( self , autre_point ) -> float :
+" " " Calcule la distance euclidienne vers un autre point " " "
+9
+10
+2.3.2
+Classe GrapheRoutier
+Listing 2 – Graphe du reseau routier
+1
+2
+3
+4
+class GrapheRoutier :
+def __init__ ( self ) :
+self . sommets = {}
+self . aretes = {}
+# Dict { id : PointCollecte }
+# Dict {( id1 , id2 ) : distance }
+5
+6
+7
+def ajouter_sommet ( self , point : PointCollecte ) -> None :
+" " " Ajoute un sommet au graphe " " "
+8
+9
+10
+11
+def ajouter_arete ( self , id1 : int , id2 : int ,
+distance : float = None ) -> None :
+" " " Ajoute une arete entre deux sommets " " "
+12
+13
+14
+15
+def plu s_court_ chemin ( self , depart : int , arrivee : int ) -> tuple :
+" " " Retourne ( distance , chemin ) avec Dijkstra " " "
+# Retour : ( float , list [ int ])
+516
+def mat rice_dis tances ( self ) -> list :
+" " " Retourne la matrice des distances entre tous les sommets " " "
+# Retour : list [ list [ float ]]
+17
+18
+19
+2.4Fichiers d’Entrée/Sortie
+2.4.1Fichier d’Entrée : input_niveau1.json
+Listing 3 – Format d’entree Niveau 1
+{
+1
+" depot " : {
+" id " : 0 ,
+"x": 0,
+"y": 0,
+" nom " : " Centre de traitement "
+},
+" points_collecte " : [
+{ " id " : 1 , " x " : 2 . 5 , " y " : 3 . 1 , " nom " : " Quartier Nord
+"},
+{ " id " : 2 , " x " : 5 . 2 , " y " : 4 . 8 , " nom " : " Centre Ville "
+},
+{ " id " : 3 , " x " : 7 . 8 , " y " : 1 . 2 , " nom " : " Zone
+Industrielle " }
+],
+" connexions " : [
+{ " depart " : 0 , " arrivee " : 1 , " distance " : null } ,
+{ " depart " : 1 , " arrivee " : 2 , " distance " : 4 . 2 }
+]
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+}
+17
+2.4.2
+Fichier de Sortie : output_niveau1.json
+Listing 4 – Format de sortie Niveau 1
+1
+2
+3
+4
+5
+6
+7
+8
+9
+{
+" matrice_distances " : [
+[0.0, 3.9, 6.8, 8.1],
+[3.9, 0.0, 4.2, 6.5],
+[6.8, 4.2, 0.0, 5.3],
+[8.1, 6.5, 5.3, 0.0]
+],
+" chemins_calcules " : [
+{
+6" depart " : 0 ,
+" arrivee " : 3 ,
+" distance " : 8 . 1 ,
+" chemin " : [ 0 , 1 , 2 , 3 ]
+10
+11
+12
+13
+}
+]
+14
+15
+}
+16
+2.5
+Tests de Validation
+1. Test 1.1 : Charger 10 points et vérifier que la matrice 10×10 est correcte
+2. Test 1.2 : Calculer le chemin 0→5 et vérifier distance > 0
+3. Test 1.3 : Vérifier symétrie : distance(i,j) = distance(j,i)
+4. Test 1.4 : Vérifier inégalité triangulaire
+3Niveau 2 : Affectation Camion ↔ Zone
+3.1Objectif du Niveau
+Affecter optimalement chaque zone à un camion disponible en modélisant un graphe
+biparti.
+3.2
+Modèle Mathématique
+— Graphe biparti : G = (C ∪ Z, E)
+— Partie C : C = {c1 , . . . , cm } (camions)
+— Partie Z : Z = {z1 , . . . , zn } (zones)
+— Arêtes : E = {(ci , zj ) | camion i peut servir zone j}
+— Pondération : w(ci , zj ) = cout estime de collecte
+3.3Classes à Implémenter
+3.3.1Classe Camion
+Listing 5 – Structure d’un camion
+1
+2
+3
+4
+5
+6
+7
+8
+class Camion :
+def __init__ ( self , id_camion : int , capacite : float ,
+cout_fixe : float , zone_accessible : list = None ) :
+self . id = id_camion
+self . capacite = capacite
+# en kg
+self . cout_fixe = cout_fixe
+# cout journalier
+self . zone_accessible = zone_accessible or []
+self . charge_actuelle = 0.0
+73.3.2
+Classe Zone
+Listing 6 – Structure d’une zone
+class Zone :
+def __init__ ( self , id_zone : int , points : list ,
+volume_estime : float , centre_x : float ,
+centre_y : float ) :
+self . id = id_zone
+self . points = points
+# IDs des points
+self . volume_estime = volume_estime
+self . centre = ( centre_x , centre_y )
+1
+2
+3
+4
+5
+6
+7
+8
+3.3.3
+Classe AffectateurBiparti
+Listing 7 – Algorithme d’affectation
+class Aff ec ta teu rB ip art i :
+def __init__ ( self , camions : list , zones : list ,
+graphe : GrapheRoutier ) :
+self . camions = camions
+self . zones = zones
+self . graphe = graphe
+1
+2
+3
+4
+5
+6
+7
+def c a l c u l e r _ c o u t _ a f f e c t a t i o n ( self , camion_id : int ,
+zone_id : int ) -> float :
+" " " Calcule le cout d ’ affectation d ’ un camion a une zone " " "
+# Retour : float
+8
+9
+10
+11
+12
+def a f f e c t a t i o n _ g l o u t o n n e ( self ) -> dict :
+" " " Affectation gloutonne basee sur cout minimal " " "
+# Retour : Dict [ int , list [ int ]] { camion_id : [ zone_ids ]}
+13
+14
+15
+16
+def v e r i f i e r _ c o nt r a i n t e s ( self , affectation : dict ) -> bool :
+" " " Verifie capacite et accessibilite " " "
+# Retour : bool
+17
+18
+19
+20
+def eq u i li b ra g e _c h ar g es ( self , affectation : dict ) -> dict :
+" " " Reequilibre les charges entre camions " " "
+# Retour : Dict [ int , list [ int ]]
+21
+22
+23
+1
+2
+3
+4
+5
+3.4Fichiers d’Entrée/Sortie
+3.4.1Fichier d’Entrée : input_niveau2.json
+{
+" camions " : [
+{
+" id " : 1 ,
+" capacite " : 5 0 0 0 ,
+8" cout_fixe " : 2 0 0 ,
+" zones_accessibles " : [ 1 , 2 , 3 ] ,
+" position_initial " : { " x " : 0 , " y " : 0 }
+6
+7
+8
+}
+],
+" zones " : [
+{
+" id " : 1 ,
+" points " : [ 1 , 2 , 3 ] ,
+" volume_moyen " : 1 2 0 0 ,
+" centre " : { " x " : 3 . 5 , " y " : 4 . 2 } ,
+" frequence_collecte " : " quotidien "
+}
+],
+" contraintes " : {
+" capacite_max_par_camion " : 6 0 0 0 ,
+" zones_incompatibles " : [ [ 1 , 2 ] ] ,
+" priorites " : [ { " zone_id " : 1 , " priorite " : " haute
+"}]
+}
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+}
+25
+3.4.2
+1
+Fichier de Sortie : output_niveau2.json
+{
+" affectation " : [
+{
+" camion_id " : 1 ,
+" zones_affectees " : [ 1 , 3 , 5 ] ,
+" charge_totale " : 4 5 0 0 ,
+" cout_estime " : 3 2 0 . 5 ,
+" pourcentage_utilisation " : 9 0
+}
+],
+" statistiques " : {
+" nombre_camions_utilises " : 3 ,
+" charge_moyenne " : 4 2 0 0 ,
+" ecart_type_charge " : 3 5 0 ,
+" zones_non_affectees " : [ ]
+}
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+}
+93.5
+Tests de Validation
+1. Test 2.1 : Affecter 5 zones à 3 camions (capacités variées)
+2. Test 2.2 : Vérifier qu’aucun camion ne dépasse capacité
+3. Test 2.3 : Tester avec zone inaccessible → doit échouer
+4. Test 2.4 : Mesurer l’équilibrage : écart-type < 20% moyenne
+4Niveau 3 : Modèle Temporel Camion ↔ Zone ↔ Cré-
+neau
+4.1Objectif du Niveau
+Planifier les créneaux horaires en modélisant un graphe triparti avec contraintes
+temporelles.
+4.2
+Modèle Mathématique
+— Graphe triparti : G = (C ∪ Z ∪ T, E)
+— Partie C : Camions
+— Partie Z : Zones
+— Partie T : T = {t1 , . . . , tk } (créneaux temporels)
+— Arêtes : (ci , zj , tk ) possible si :
+1. Camion ci peut servir zone zj
+2. Zone zj accessible au créneau tk
+3. Durée totale ≤ durée créneau
+1
+2
+3
+4
+5
+6
+7
+8
+4.3Classes à Implémenter
+4.3.1Classe CreneauHoraire
+class CreneauHoraire :
+def __init__ ( self , id_creneau : int , debut : str , fin : str ,
+jour : str , cout_congestion : float = 1.0) :
+self . id = id_creneau
+self . debut = datetime . strptime ( debut , " % H :% M " )
+self . fin = datetime . strptime ( fin , " % H :% M " )
+self . jour = jour
+self . cout_congestion = cout_congestion # 1.0 -2.0
+9
+10
+11
+12
+def duree ( self ) -> float :
+" " " Retourne duree en heures " " "
+# Retour : float
+13
+14
+15
+16
+def chevauche ( self , autre_creneau ) -> bool :
+" " " Verifie chevauchement " " "
+# Retour : bool
+104.3.2
+Classe ContrainteTemporelle
+class C o n t r a i n t e T e m po r e l l e :
+def __init__ ( self ) :
+self . fenetres_zone = {} # { zone_id : ( debut , fin ) }
+self . pauses_camion = {} # { camion_id : [( debut , fin ) ]}
+self . congestion = {}
+# {( zone_id , creneau ) : niveau }
+1
+2
+3
+4
+5
+6
+def est_realisable ( self , camion_id : int , zone_id : int ,
+creneau_id : int ) -> bool :
+" " " Verifie faisabilite temporelle " " "
+# Retour : bool
+7
+8
+9
+10
+11
+def cal culer_pe nalite ( self , camion_id : int , zone_id : int ,
+creneau_id : int ) -> float :
+" " " Calcule penalite temporelle ( retard , congestion ) " " "
+# Retour : float
+12
+13
+14
+15
+4.3.3
+Classe PlanificateurTriparti
+class P l a n i f i c a t e u r T r i p a r t i :
+def __init__ ( self , affectateur : AffectateurBiparti ,
+contraintes : C o n t r a i n t e T e mp o r e l l e ) :
+self . affectateur = affectateur
+self . contraintes = contraintes
+1
+2
+3
+4
+5
+6
+def g e n e r e r _ p l a n_ o p t i m a l ( self , horizon_jours : int = 7) -> dict :
+" " " Genere plan hebdomadaire optimal " " "
+# Retour : Dict [ str , list ] {" lundi ": [ affectations ]}
+7
+8
+9
+10
+def r e s o u d r e _ a v e c _ c o n t r a i n t e s ( self ) -> list :
+" " " Resout avec algorithme de programmation par contraintes " " "
+# Retour : list [ tuple ] [( camion_id , zone_id , creneau_id ) ]
+11
+12
+13
+14
+def evaluer_plan ( self , plan : dict ) -> dict :
+" " " Evalue qualite du plan ( respect horaires , cout , etc .) " " "
+# Retour : Dict [ str , float ]
+15
+16
+17
+1
+2
+3
+4
+5
+6
+7
+4.4Fichiers d’Entrée/Sortie
+4.4.1Fichier d’Entrée : input_niveau3.json
+{
+" creneaux " : [
+{
+" id " : 1 ,
+" debut " : " 0 8 : 0 0 " ,
+" fin " : " 1 0 : 0 0 " ,
+" jour " : " lundi " ,
+11" niveau_congestion " : 1 . 2 ,
+" zones_exclusives " : [ 3 , 5 ]
+8
+9
+}
+],
+" contraintes_temporelles " : {
+" fenetres_zone " : [
+{ " zone_id " : 1 , " debut " : " 0 6 : 0 0 " , " fin " : " 1 8 : 0 0 "
+}
+],
+" pauses_obligatoires " : [
+{ " camion_id " : 1 , " debut " : " 1 2 : 0 0 " , " duree " : 1 }
+],
+" zones_interdites_nuit " : [ 1 , 2 , 3 ]
+},
+" horizon_planification " : {
+" date_debut " : " 2 0 2 4 -0 1 -1 5 " ,
+" date_fin " : " 2 0 2 4 -0 1 -2 1 " ,
+" pas_temps " : 3 0
+}
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+}
+26
+4.4.2
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+Fichier de Sortie : output_niveau3.json
+{
+" planification_hebdomadaire " : {
+" lundi " : [
+{
+" camion_id " : 1 ,
+" zone_id " : 2 ,
+" creneau " : { " debut " : " 0 8 : 0 0 " , " fin " : " 1 0 : 0 0
+"},
+" taches " : [
+{ " point_id " : 5 , " ordre " : 1 , " heure_estimee "
+: "08:30"},
+{ " point_id " : 7 , " ordre " : 2 , " heure_estimee "
+: "09:15"}
+],
+" duree_totale " : 1 2 0 ,
+" retard_estime " : 0
+}
+]
+},
+" indicateurs " : {
+" taux_occupation " : 8 5 . 3 ,
+12" respect_horaires " : 9 2 . 1 ,
+" congestion_moyenne " : 1 . 1 5 ,
+" retard_moyen " : 4 . 2
+19
+20
+21
+}
+22
+}
+23
+4.5
+Tests de Validation
+1. Test 3.1 : Planifier 3 camions sur 5 créneaux (10 zones)
+2. Test 3.2 : Vérifier non-chevauchenent pour même camion
+3. Test 3.3 : Tester fenêtre interdite → doit échouer
+4. Test 3.4 : Mesurer taux occupation > 70%
+5Niveau 4 : VRP Enrichi avec Points Réels
+5.1Objectif du Niveau
+Générer des tournées concrètes avec optimisation des trajets individuels (Vehicle
+Routing Problem).
+5.2
+Modèle Mathématique
+— Graphe complet
+G = (V, E) où V = dépôt ∪ P
+P :P
+— Objectif : min k i,j cij xijk
+— Contraintes :
+P
+1.
+i di yik ≤ Qk (capacité)
+P
+2.
+k yik = 1 (chaque point visité)
+3. Continuité de tournée
+1
+2
+3
+4
+5
+6
+5.3Classes à Implémenter
+5.3.1Classe Tournee
+class Tournee :
+def __init__ ( self , camion_id : int , points : list = None ) :
+self . camion_id = camion_id
+self . points = points or [] # liste ordonnee d ’ IDs
+self . heure_depart = None
+self . heure_retour = None
+7
+8
+9
+10
+def ajouter_point ( self , point_id : int , position : int = -1) -> bool
+:
+" " " Ajoute point a tournee avec verification capacite " " "
+# Retour : bool ( succes / echec )
+1311
+def cal culer_di stance ( self , graphe : GrapheRoutier ) -> float :
+" " " Calcule distance totale de la tournee " " "
+# Retour : float
+12
+13
+14
+15
+def calculer_duree ( self , temps_service : dict ) -> float :
+" " " Calcule duree estimee avec temps de service " " "
+# Retour : float
+16
+17
+18
+19
+def v e r i f i e r _ f a is a b i l i t e ( self , contraintes : dict ) -> bool :
+" " " Verifie toutes les contraintes operationnelles " " "
+# Retour : bool
+20
+21
+22
+5.3.2
+Classe OptimiseurVRP
+class OptimiseurVRP :
+def __init__ ( self , graphe : GrapheRoutier , camions : list ) :
+self . graphe = graphe
+self . camions = camions
+self . tournees = []
+1
+2
+3
+4
+5
+6
+def c o n s t r u i r e _ s o l u t i o n _ i n i t i a l e ( self ) -> list :
+" " " Construction gloutonne ( plus proche voisin ) " " "
+# Retour : list [ Tournee ]
+7
+8
+9
+10
+def algorithme_2opt ( self , tournee : Tournee ) -> Tournee :
+" " " Ameliore une tournee par echanges 2 - opt " " "
+# Retour : Tournee
+11
+12
+13
+14
+def recherche_tabou ( self , iterations : int = 100) -> list :
+" " " Recherche Tabou pour optimisation globale " " "
+# Retour : list [ Tournee ] ( meilleure solution )
+15
+16
+17
+18
+def evaluer_solution ( self , tournees : list ) -> dict :
+" " " Evalue une solution complete " " "
+# Retour : Dict [ str , float ]
+19
+20
+21
+5.3.3
+1
+2
+3
+4
+Classe VisualiseurTournees
+class V is u al i se u r To u rn e e s :
+def __init__ ( self , tournees : list , graphe : GrapheRoutier ) :
+self . tournees = tournees
+self . graphe = graphe
+5
+6
+7
+8
+def generer_carte ( self , fichier_sortie : str ) -> None :
+" " " Genere visualisation cartographique " " "
+# Pas de retour , sauvegarde fichier
+9
+10
+11
+12
+def generer_gantt ( self , fichier_sortie : str ) -> None :
+" " " Genere diagramme de Gantt des tournees " " "
+# Pas de retour , sauvegarde fichier
+1413
+def c a l c u l e r _ s t a t i s t i q u e s ( self ) -> dict :
+" " " Calcule stats detaillees " " "
+# Retour : Dict [ str , any ]
+14
+15
+16
+5.4Fichiers d’Entrée/Sortie
+5.4.1Fichier d’Entrée : input_niveau4.json
+{
+1
+" configuration_vrp " : {
+" nombre_camions " : 3 ,
+" strategie_construction " : " plus_proche_voisin " ,
+" methode_amelioration " : " 2 opt " ,
+" critere_arret " : { " iterations " : 1 0 0 , "
+stagnation " : 1 0 }
+},
+" points_detail " : [
+{
+" id " : 1 ,
+" type " : " conteneur " ,
+" capacite " : 1 2 0 ,
+" niveau_actuel " : 8 5 ,
+" temps_service " : 5 ,
+" fenetre " : { " debut " : " 0 6 : 0 0 " , " fin " : " 2 0 : 0 0 " } ,
+" restrictions " : { " camion_mini " : null , " acces " :
+" facile " }
+}
+],
+" parametres_optimisation " : {
+" poids_distance " : 1 . 0 ,
+" poids_temps " : 1 . 5 ,
+" poids_equilibre " : 0 . 8 ,
+" penalite_retard " : 1 0 . 0
+}
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+}
+25
+5.4.2
+1
+2
+3
+4
+5
+Fichier de Sortie : output_niveau4.json
+{
+" tournees_optimisees " : [
+{
+" camion_id " : 1 ,
+" points_ordre " : [ 0 , 3 , 7 , 2 , 5 , 0 ] ,
+15" distance_totale " : 2 4 . 5 ,
+" duree_estimee " : 1 8 5 ,
+" charge_finale " : 4 2 0 0 ,
+" heure_depart " : " 0 8 : 0 0 " ,
+" heure_retour_estimee " : " 1 1 : 0 5 " ,
+" couts " : { " carburant " : 1 8 . 5 , " maintenance " : 3 . 2
+, " total " : 2 1 . 7 }
+6
+7
+8
+9
+10
+11
+}
+],
+" performance " : {
+" distance_totale " : 7 8 . 3 ,
+" duree_moyenne_tournee " : 1 7 2 ,
+" ecart_type_charge " : 3 2 0 ,
+" taux_utilisation_camions " : 8 8 . 5 ,
+" amelioration_vs_initial " : 2 3 . 7
+},
+" visualisations " : {
+" carte " : " output / tournees_carte . png " ,
+" gantt " : " output / gantt_tournees . png " ,
+" statistiques " : " output / stats_detaillees . csv "
+}
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+}
+26
+5.5
+Tests de Validation
+1. Test 4.1 : Optimiser 20 points avec 3 camions
+2. Test 4.2 : Vérifier que 2-opt améliore la solution initiale
+3. Test 4.3 : Tester capacité dépassée → doit échouer
+4. Test 4.4 : Mesurer amélioration > 15% vs solution naïve
+6Niveau 5 : Système Dynamique Multi-Critères
+6.1Objectif du Niveau
+Gérer dynamiquement la collecte avec réoptimisation en temps réel et objectifs mul-
+tiples.
+6.2
+Modèle Mathématique
+— Graphe dynamique : G(t) = (V (t), E(t))
+— Objectifs multiples :
+1. f1 : Minimiser coût total
+2. f2 : Minimiser émissions CO2
+163. f3 : Maximiser satisfaction citoyenne
+4. f4 : Équilibrer charge travail
+— Contraintes dynamiques :
+— Remplissage aléatoire (capteurs IoT)
+— Trafic variable
+— Incidents (pannes, routes bloquées)
+6.3Classes à Implémenter
+6.3.1Classe CapteurIoT
+class CapteurIoT :
+def __init__ ( self , point_id : int , taux_remplissage : float = 0.0) :
+self . point_id = point_id
+self . historique = [] # [( timestamp , niveau ) ]
+self . seuil_alerte = 80.0
+1
+2
+3
+4
+5
+6
+def lire_niveau ( self ) -> float :
+" " " Simule lecture capteur ( aleatoire + tendance ) " " "
+# Retour : float 0 -100
+7
+8
+9
+10
+def detecter_urgence ( self ) -> bool :
+" " " Detecte si besoin collecte urgente " " "
+# Retour : bool
+11
+12
+13
+14
+def e s t i m e r _ t a u x _ r e m p l i s s a g e ( self , heures : int ) -> float :
+" " " Predit niveau futur par regression lineaire " " "
+# Retour : float
+15
+16
+17
+6.3.2
+1
+2
+3
+4
+5
+6
+7
+8
+Classe SimulateurTempsReel
+class S im u la t eu r T em p sR e e l :
+def __init__ ( self , optimiseur : OptimiseurVRP ,
+capteurs : dict , heure_debut : str = " 08:00 " ) :
+self . optimiseur = optimiseur
+self . capteurs = capteurs # { point_id : CapteurIoT }
+self . heure_actuelle = datetime . strptime ( heure_debut , " % H :% M " )
+self . evenements = []
+self . tourn ees_en_c ours = []
+9
+10
+11
+12
+def ajo uter_eve nement ( self , type_event : str ,
+details : dict ) -> None :
+" " " Ajoute evenement ( panne , trafic , demande speciale ) " " "
+13
+14
+15
+16
+def e xe cu ter _p as _te mp s ( self , duree_minutes : int = 15) -> dict :
+" " " Execute un pas de simulation " " "
+# Retour : Dict [ str , any ] ( etat nouveau )
+17
+18
+19
+def re p l an i fi e r _u r ge n ce ( self , points_urgents : list ) -> list :
+" " " Replanifie pour points urgents " " "
+17# Retour : list [ Tournee ]
+20
+21
+def c a l c u l e r _ e m i s s i o n s _ c o 2 ( self , tournees : list ) -> float :
+" " " Estime emissions CO2 ( kg ) " " "
+# Retour : float
+22
+23
+24
+6.3.3
+Classe OptimiseurMultiObjectif
+class O p t i m i s e u r M u l t i O b j e c t i f :
+def __init__ ( self , objectifs : list , poids : list = None ) :
+self . objectifs = objectifs # liste fonctions objectif
+self . poids = poids or [1.0] * len ( objectifs )
+self . solutions_pareto = []
+1
+2
+3
+4
+5
+6
+def evaluer_solution ( self , tournees : list ) -> list :
+" " " Evalue solution sur tous objectifs " " "
+# Retour : list [ float ] ( scores )
+7
+8
+9
+10
+def t r o u v e r _ f r o nt _ p a r e t o ( self , population : list ,
+generations : int = 50) -> list :
+" " " Trouve front de Pareto par NSGA - II simplifie " " "
+# Retour : list [ tuple ] ( solutions non - dominees )
+11
+12
+13
+14
+15
+def s e l e c t i o n n e r _ s o l u t i o n ( self , strategie : str = " equilibre " ) ->
+dict :
+" " " Selectionne solution selon strategie " " "
+# Retour : Dict [ str , any ]
+16
+17
+18
+6.3.4
+1
+2
+3
+4
+5
+6
+7
+8
+9
+Classe DashboardTempsReel
+class Das hb oa rdT em ps Ree l :
+def __init__ ( self , simulateur : S i mu l a te u rT e m ps R ee l ) :
+self . simulateur = simulateur
+self . metrics = {
+’ co2_total ’: 0.0 ,
+’ cout_total ’: 0.0 ,
+’ satisfaction ’: 100.0 ,
+’ points_urgents ’: []
+}
+10
+11
+12
+def mettre_a_jour ( self ) -> None :
+" " " Met a jour tous les indicateurs " " "
+13
+14
+15
+16
+def generer_rapport ( self , periode : str = " journalier " ) -> dict :
+" " " Genere rapport detaille " " "
+# Retour : Dict [ str , any ]
+17
+18
+19
+20
+def ale rter_ope rateur ( self , type_alerte : str ,
+severite : int ) -> None :
+" " " Genere alerte pour operateur " " "
+181
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+6.4Fichiers d’Entrée/Sortie
+6.4.1Fichier d’Entrée : input_niveau5.json
+{
+" simulation " : {
+" duree_jours " : 3 ,
+" pas_temps_minutes " : 3 0 ,
+" heure_debut " : " 0 6 : 0 0 " ,
+" heure_fin " : " 2 0 : 0 0 " ,
+" generer_evenements " : true
+},
+" capteurs_iot " : [
+{
+" point_id " : 1 ,
+" type " : " ultrason " ,
+" precision " : 9 5 ,
+" frequence_mise_a_jour " : 5 ,
+" seuils " : { " avertissement " : 7 0 , " urgence " : 9 0 }
+}
+],
+" objectifs " : [
+{ " nom " : " cout " , " type " : " minimiser " , " poids " : 0 . 3 } ,
+{ " nom " : " co 2 " , " type " : " minimiser " , " poids " : 0 . 3 } ,
+{ " nom " : " satisfaction " , " type " : " maximiser " , " poids
+": 0.2},
+{ " nom " : " equite " , " type " : " maximiser " , " poids " : 0 . 2
+}
+],
+" evenements_aleatoires " : [
+{
+" type " : " panne_camion " ,
+" probabilite " : 0 . 0 5 ,
+" duree_moyenne " : 1 2 0 ,
+" impact " : " redistribution_points "
+},
+{
+" type " : " trafic_intense " ,
+" probabilite " : 0 . 1 5 ,
+" zone " : [ 1 , 3 , 5 ] ,
+" impact " : { " vitesse_reduite " : 0 . 5 }
+},
+{
+" type " : " demande_speciale " ,
+" probabilite " : 0 . 1 ,
+19" exemples " : [ " dechets_verre " , " encombrants " ]
+40
+}
+]
+41
+42
+}
+43
+6.4.2
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+Fichier de Sortie : output_niveau5.json
+{
+" simulation_resultats " : {
+" jour_ 1 " : {
+" tournees_executees " : 8 ,
+" distance_totale " : 1 5 6 . 7 ,
+" emissions_co 2 " : 4 7 . 0 ,
+" couts_totaux " : 1 2 5 0 . 5 ,
+" evenements " : [
+{ " type " : " panne " , " camion " : 2 , " duree " : 9 5 ,
+" impact " : " mineur " } ,
+{ " type " : " trafic " , " zone " : 3 , " retard_moyen
+": 12}
+],
+" satisfaction_moyenne " : 8 8 . 5
+}
+},
+" front_pareto " : [
+{
+" solution_id " : 1 ,
+" scores " : { " cout " : 1 2 0 0 , " co 2 " : 4 5 , "
+satisfaction " : 9 0 , " equite " : 8 5 } ,
+" tournees " : [ ... ] ,
+" dominance " : " non_dominee "
+}
+],
+" recommandations " : [
+{
+" type " : " replanification " ,
+" justification " : " 3 points urgents detectes " ,
+" actions " : [ " redistribuer_points " , "
+ajuster_horaires " ] ,
+" gain_estime " : 1 5 . 3
+},
+{
+" type " : " maintenance_preventive " ,
+" camion " : 3 ,
+" raison " : " kilometrage_proche_limite " ,
+20" urgence " : " moyenne "
+34
+}
+],
+" dashboard " : {
+" indicateurs_temps_reel " : {
+" co 2 _instantane " : 2 . 3 ,
+" couts_cumules " : 8 5 0 . 2 ,
+" taux_remplissage_moyen " : 6 5 . 8 ,
+" points_urgents_actuels " : [ 7 , 1 2 , 2 5 ] ,
+" camions_en_operation " : 4 ,
+" prochaines_collectes " : [
+{ " point " : 1 5 , " heure_estimee " : " 1 4 : 3 0 " , "
+camion " : 2 }
+]
+},
+" alertes_actives " : [
+{ " type " : " urgence " , " point " : 7 , " niveau " : 9 5 , "
+depuis " : " 0 2 : 1 5 " } ,
+{ " type " : " performance " , " message " : " Tournee 3
+en retard de 1 8 min " }
+]
+}
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+}
+53
+6.5
+Tests de Validation
+1. Test 5.1 : Simuler 1 jour avec 5 événements aléatoires
+2. Test 5.2 : Détecter urgence quand remplissage > 90%
+3. Test 5.3 : Vérifier replanification < 2 minutes
+4. Test 5.4 : Mesurer amélioration multi-objectif > 10%
+7Stratégie de Développement et Livrables
+7.1Arborescence du Projet
+projet_collecte_dechets/
+|-- niveau1/
+|
+|-- src/
+|
+|
+|-- point_collecte.py
+|
+|
+|-- graphe_routier.py
+|
+|
+’-- main_niveau1.py
+|
+|-- data/
+|
+|
+|-- input_niveau1.json
+# Livrable 1
+21|
+|
+’-- output_niveau1.json
+|
+’-- tests/
+|
+’-- test_niveau1.py
+|-- niveau2/
+# Livrable 2
+|
+|-- src/
+|
+|
+|-- camion.py
+|
+|
+|-- zone.py
+|
+|
+|-- affectateur_biparti.py
+|
+|
+’-- main_niveau2.py
+|
+|-- data/
+|
+|
+|-- input_niveau2.json
+|
+|
+’-- output_niveau2.json
+|
+’-- tests/
+|
+’-- test_niveau2.py
+|-- niveau3/
+# Livrable 3
+|
+|-- src/
+|
+|
+|-- creneau_horaire.py
+|
+|
+|-- contrainte_temporelle.py
+|
+|
+|-- planificateur_triparti.py
+|
+|
+’-- main_niveau3.py
+|
+|-- data/
+|
+|
+|-- input_niveau3.json
+|
+|
+’-- output_niveau3.json
+|
+’-- tests/
+|
+’-- test_niveau3.py
+|-- niveau4/
+# Livrable 4
+|
+|-- src/
+|
+|
+|-- tournee.py
+|
+|
+|-- optimiseur_vrp.py
+|
+|
+|-- visualiseur_tournees.py
+|
+|
+’-- main_niveau4.py
+|
+|-- data/
+|
+|
+|-- input_niveau4.json
+|
+|
+’-- output_niveau4.json
+|
+|-- tests/
+|
+|
+’-- test_niveau4.py
+|
+’-- visualisations/
+# Genere automatiquement
+|-- niveau5/
+# Livrable 5
+|
+|-- src/
+|
+|
+|-- capteur_iot.py
+|
+|
+|-- simulateur_temps_reel.py
+|
+|
+|-- optimiseur_multi_objectif.py
+|
+|
+|-- dashboard_temps_reel.py
+|
+|
+’-- main_niveau5.py
+|
+|-- data/
+22|
+|
+|-- input_niveau5.json
+|
+|
+’-- output_niveau5.json
+|
+|-- tests/
+|
+|
+’-- test_niveau5.py
+|
+’-- dashboards/
+# Genere automatiquement
+|-- commun/
+# Classes communes reutilisables
+|
+|-- outils_math.py
+|
+|-- parseur_json.py
+|
+|-- validateurs.py
+|
+’-- constantes.py
+’-- README.md
+# Documentation complete
+7.2
+Plan de Développement par Itérations
+Iteration
+Duree
+1
+1 semaine
+2
+1 semaine
+3
+1 semaine
+4
+2 semaines
+5
+2 semaines
+6
+1 semaine
+Livrable
+Criteres d’Acceptation
+Niveau 1
+Tests 1.1 a 1.4 valides
+Niveau 2
+Tests 2.1 a 2.4 valides
+Niveau 3
+Tests 3.1 a 3.4 valides
+Niveau 4
+Tests 4.1 a 4.4 + visualisations
+Niveau 5
+Tests 5.1 a 5.4 + dashboard
+Integration Tous niveaux fonctionnent ensemble
+Table 1 – Plan de développement iteratif
+7.3
+Barème d’Évaluation
+Critere
+Ponderation
+Details
+Fonctionnalite Niveau 1
+10%
+Calcul distances correct
+Fonctionnalite Niveau 2
+15%
+Affectation optimale
+Fonctionnalite Niveau 3
+15%
+Planification temporelle
+Fonctionnalite Niveau 4
+20%
+Optimisation VRP
+Fonctionnalite Niveau 5
+20%
+Systeme dynamique
+Qualite du code
+10%
+PEP8, commentaires, docstrings
+Tests unitaires
+5%
+Couverture > 80%
+Rapport technique
+5%
+Clarte, analyse resultats
+Total
+100%
+Table 2 – Bareme d’evaluation du projet
+7.4
+Réutilisation entre Niveaux
+— Niveau 1 → 2 : GrapheRoutier réutilisé pour calcul distances
+23— Niveau 2 → 3 : AffectateurBiparti étendu avec temps
+— Niveau 3 → 4 : Contraintes temporelles intégrées dans VRP
+— Niveau 4 → 5 : OptimiseurVRP utilisé dans simulateur
+— Tous niveaux : Classes PointCollecte, Camion
+8Annexe : Guide d’Implémentation
+8.1Installation Environnement
+# 1. Creer environnement virtuel
+python -m venv venv
+source venv / bin / activate # Linux / Mac
+venv \ Scripts \ activate
+# Windows
+1
+2
+3
+4
+5
+# 2. Installer dependances
+pip install numpy matplotlib networkx pandas
+6
+7
+8
+# 3. Structure du projet
+mkdir -p p r o j e t _ c o l l e c t e _ d e c h e t s /{ niveau {1..5}/{ src , data , tests } ,
+commun }
+9
+10
+8.2
+Modèles de Données de Référence
+Donnee
+Point de collecte
+Camion
+Zone
+Creneau
+Tournee
+Capteur IoT
+Type
+Object
+Object
+Object
+Object
+Object
+Object
+Exemple
+id, x, y, demande
+id, capacite, cout fixe
+id, points, volume
+id, debut, fin, jour
+camion, points ordonnes
+point, seuils, historique
+Table 3 – Modeles de donnees communs
+8.3Questions de Vérification par Niveau
+8.3.1Niveau 1 - Questions Fondamentales
+1. Le graphe est-il connexe ? (tous points accessibles)
+2. Les distances sont-elles symétriques ?
+3. Quelle complexité pour Dijkstra sur n points ?
+4. Comment gérer les routes à sens unique ?
+248.3.2
+Niveau 2 - Questions d’Affectation
+1. Quelle stratégie quand capacité insuffisante ?
+2. Comment prioriser les zones importantes ?
+3. Comment équilibrer charge entre camions ?
+4. Que faire des zones non affectables ?
+8.3.3
+Niveau 3 - Questions Temporelles
+1. Comment gérer les chevauchements ?
+2. Quelle politique pour les retards ?
+3. Comment optimiser les temps de trajet ?
+4. Comment ajuster aux pics de trafic ?
+8.3.4
+Niveau 4 - Questions d’Optimisation
+1. 2-opt améliore-t-il toujours ?
+2. Quand arrêter l’optimisation ?
+3. Comment visualiser efficacement ?
+4. Quels indicateurs suivre ?
+8.3.5
+Niveau 5 - Questions Dynamiques
+1. Quand déclencher replanification ?
+2. Comment arbitrer entre objectifs ?
+3. Comment gérer les incidents ?
+4. Quelle fréquence de mise à jour ?
+8.4
+1
+2
+3
+4
+5
+6
+Exemple d’Exécution Complète
+# Exemple d ’ integration progressive
+from commun . parseur_json import c h a r g e r _ c o n f i g u r a t i o n
+from niveau1 . graphe_routier import GrapheRoutier
+from niveau2 . a ff e c ta t eu r _ bi p ar t i import A ff ect at eu rBi pa rt i
+from niveau4 . optimiseur_vrp import OptimiseurVRP
+from niveau5 . s i m u l a t e u r _ t e m p s _ r e e l import Si m ul a te u r Te m ps R e el
+7
+8
+9
+# 1. Charger configuration
+config = c h a r g e r _ c o n f i g u r a t i o n ( " c on f i g_ v il l e _p r op r e . json " )
+10
+11
+12
+13
+14
+# 2. Construire graphe de base
+graphe = GrapheRoutier ()
+for point in config [ " points " ]:
+graphe . ajouter_sommet ( point )
+15
+25# 3. Affecter zones aux camions
+affectateur = A ff ec tat eu rB ipa rt i ( config [ " camions " ] ,
+config [ " zones " ] , graphe )
+affectation = affectateur . a f f e c t a t i o n _ g l o u t o n n e ()
+16
+17
+18
+19
+20
+# 4. Optimiser tournees
+optimiseur = OptimiseurVRP ( graphe , config [ " camions " ])
+tournees = optimiseur . recherche_tabou ( iterations =50)
+21
+22
+23
+24
+# 5. Simuler en temps reel
+simulateur = S i m ul a te u r Te m ps R ee l ( optimiseur ,
+config [ " capteurs " ])
+resultats = simulateur . simuler_journee ()
+25
+26
+27
+28
+29
+print ( f " Optimisation terminee . Gain total : { resultats [ ’ gain ’]}% " )
+30
+8.5
+Ressources et Références
+— Algorithmes : Dijkstra, 2-opt, Recherche Tabou, NSGA-II
+— Librairies Python : NetworkX (graphes), Matplotlib (visualisation), Pandas (ana-
+lyse)
+— Références académiques :
+1. Vehicle Routing Problem (VRP) - Toth & Vigo
+2. Multi-Objective Optimization - Deb et al.
+3. Dynamic Vehicle Routing - Psaraftis et al.
+— Données de test : Fichiers JSON fournis + générateur aléatoire inclus
+26

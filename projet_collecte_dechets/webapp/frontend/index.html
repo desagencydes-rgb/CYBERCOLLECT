@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberCollect – Waste Route Optimizer</title>
+  <meta name="description" content="Production-grade waste collection route optimization system with 3D satellite visualization, AI assistant, and real-time IoT simulation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <!-- SCANLINE OVERLAY -->
+  <div class="scanline-overlay" aria-hidden="true"></div>
+
+  <!-- TOP HUD BAR -->
+  <header class="hud-bar" id="hud-bar">
+    <div class="hud-left">
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">CYBER<span class="logo-accent">COLLECT</span></span>
+        <span class="logo-sub">v1.0 // SATELLITE OPTIMIZER</span>
+      </div>
+    </div>
+    <div class="hud-center">
+      <div class="signal-group">
+        <div class="signal-dot active" id="sig-backend"></div>
+        <span class="signal-label">API</span>
+        <div class="signal-dot" id="sig-llm"></div>
+        <span class="signal-label">LLM</span>
+        <div class="signal-dot active" id="sig-sim"></div>
+        <span class="signal-label">SIM</span>
+      </div>
+    </div>
+    <div class="hud-right">
+      <div class="hud-clock" id="hud-clock">--:--:--</div>
+      <div class="hud-coords" id="hud-coords">LAT 48.8566° LON 2.3522°</div>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <main class="app-layout">
+
+    <!-- LEFT SIDEBAR: Algorithm Panels -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">OPTIMIZATION MODULES</span>
+        <div class="sidebar-line"></div>
+      </div>
+
+      <!-- Level 1 -->
+      <div class="level-panel" id="panel-l1">
+        <div class="panel-header" data-panel="l1">
+          <span class="panel-badge l1">L1</span>
+          <span class="panel-title">Road Graph &amp; Dijkstra</span>
+          <span class="panel-toggle">▼</span>
+        </div>
+        <div class="panel-body" id="body-l1">
+          <p class="panel-desc">Shortest path algorithm on the road network.</p>
+          <button class="cyber-btn l1-color" id="btn-l1">
+            <span class="btn-glow"></span>
+            ▶ RUN DIJKSTRA
+          </button>
+          <div class="panel-output" id="out-l1">
+            <div class="output-placeholder">
+              <span class="ph-icon">⬡</span>
+              <span>Run algorithm to see results</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level 2 -->
+      <div class="level-panel" id="panel-l2">
+        <div class="panel-header" data-panel="l2">
+          <span class="panel-badge l2">L2</span>
+          <span class="panel-title">Truck Assignment</span>
+          <span class="panel-toggle">▼</span>
+        </div>
+        <div class="panel-body" id="body-l2">
+          <p class="panel-desc">Greedy bin-packing with load balancing.</p>
+          <button class="cyber-btn l2-color" id="btn-l2">
+            <span class="btn-glow"></span>
+            ▶ ASSIGN TRUCKS
+          </button>
+          <div class="panel-output" id="out-l2">
+            <div class="output-placeholder"><span class="ph-icon">⬡</span><span>Run algorithm to see results</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level 3 -->
+      <div class="level-panel" id="panel-l3">
+        <div class="panel-header" data-panel="l3">
+          <span class="panel-badge l3">L3</span>
+          <span class="panel-title">Weekly Schedule</span>
+          <span class="panel-toggle">▼</span>
+        </div>
+        <div class="panel-body" id="body-l3">
+          <p class="panel-desc">Time windows, driver breaks &amp; zone restrictions.</p>
+          <button class="cyber-btn l3-color" id="btn-l3">
+            <span class="btn-glow"></span>
+            ▶ GENERATE PLAN
+          </button>
+          <div class="panel-output" id="out-l3">
+            <div class="output-placeholder"><span class="ph-icon">⬡</span><span>Run algorithm to see results</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level 4 -->
+      <div class="level-panel" id="panel-l4">
+        <div class="panel-header" data-panel="l4">
+          <span class="panel-badge l4">L4</span>
+          <span class="panel-title">VRP Optimization</span>
+          <span class="panel-toggle">▼</span>
+        </div>
+        <div class="panel-body" id="body-l4">
+          <p class="panel-desc">Nearest-neighbor + Tabu search 2-opt.</p>
+          <div class="inline-control">
+            <label>Trucks</label>
+            <input type="number" id="vrp-trucks" value="3" min="1" max="8" class="cyber-input" />
+          </div>
+          <button class="cyber-btn l4-color" id="btn-l4">
+            <span class="btn-glow"></span>
+            ▶ OPTIMIZE ROUTES
+          </button>
+          <div class="panel-output" id="out-l4">
+            <div class="output-placeholder"><span class="ph-icon">⬡</span><span>Run algorithm to see results</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Level 5 -->
+      <div class="level-panel" id="panel-l5">
+        <div class="panel-header" data-panel="l5">
+          <span class="panel-badge l5">L5</span>
+          <span class="panel-title">Live Simulation</span>
+          <span class="panel-toggle">▼</span>
+        </div>
+        <div class="panel-body" id="body-l5">
+          <p class="panel-desc">Real-time IoT sensor simulation &amp; re-optimization.</p>
+          <div class="sim-controls">
+            <button class="cyber-btn l5-color" id="btn-sim-start">▶ START SIM</button>
+            <button class="cyber-btn danger" id="btn-sim-reset">↺ RESET</button>
+          </div>
+          <div class="panel-output" id="out-l5">
+            <div class="output-placeholder"><span class="ph-icon">⬡</span><span>Start simulation to see live data</span></div>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- CENTER: 3D MAP CANVAS -->
+    <section class="map-container" id="map-container">
+      <div class="map-hud-tl">
+        <span class="map-label">SATELLITE VIEW // SECTOR 7</span>
+        <span class="map-coords" id="map-zoom">ZOOM: 1.0x</span>
+      </div>
+      <div class="map-hud-tr">
+        <span id="map-active-level" class="map-active-label">NO LEVEL ACTIVE</span>
+      </div>
+      <canvas id="map-canvas"></canvas>
+      <div class="map-loading" id="map-loading">
+        <div class="loading-spinner"></div>
+        <span>INITIALIZING SATELLITE LINK...</span>
+      </div>
+      <!-- Mini Legend -->
+      <div class="map-legend">
+        <div class="legend-item"><span class="legend-dot depot"></span>Depot</div>
+        <div class="legend-item"><span class="legend-dot node"></span>Collection</div>
+        <div class="legend-item"><span class="legend-dot route"></span>Route</div>
+        <div class="legend-item"><span class="legend-dot alert"></span>Alert</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM KPI TICKER -->
+  <footer class="kpi-bar" id="kpi-bar">
+    <div class="kpi-strip" id="kpi-strip">
+      <div class="kpi-item">
+        <span class="kpi-label">NODES</span>
+        <span class="kpi-value" id="kpi-nodes">–</span>
+      </div>
+      <div class="kpi-sep">|</div>
+      <div class="kpi-item">
+        <span class="kpi-label">ROUTES</span>
+        <span class="kpi-value" id="kpi-routes">–</span>
+      </div>
+      <div class="kpi-sep">|</div>
+      <div class="kpi-item">
+        <span class="kpi-label">OPT GAIN</span>
+        <span class="kpi-value" id="kpi-gain">–</span>
+      </div>
+      <div class="kpi-sep">|</div>
+      <div class="kpi-item">
+        <span class="kpi-label">ALERTS</span>
+        <span class="kpi-value alert-val" id="kpi-alerts">0</span>
+      </div>
+      <div class="kpi-sep">|</div>
+      <div class="kpi-item">
+        <span class="kpi-label">EFFICIENCY</span>
+        <span class="kpi-value" id="kpi-eff">100%</span>
+      </div>
+      <div class="kpi-sep">|</div>
+      <div class="kpi-item">
+        <span class="kpi-label">SIM TICK</span>
+        <span class="kpi-value" id="kpi-tick">0</span>
+      </div>
+    </div>
+
+    <!-- AI Chat toggle -->
+    <button class="chat-toggle" id="chat-toggle" title="Open AI Assistant">
+      <span class="chat-icon">🤖</span>
+      <span class="chat-label">AI ASSIST</span>
+      <span class="chat-status-dot" id="chat-status-dot"></span>
+    </button>
+  </footer>
+
+  <!-- AI CHAT DRAWER -->
+  <div class="chat-drawer" id="chat-drawer">
+    <div class="chat-header">
+      <span class="chat-header-title">⬡ CYBERCOLLECT AI</span>
+      <span class="chat-model-badge" id="chat-model-badge">checking...</span>
+      <button class="chat-close" id="chat-close">✕</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-msg assistant">
+        <div class="msg-avatar">AI</div>
+        <div class="msg-content">Initializing CyberCollect AI... detecting LLM hardware.</div>
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <textarea class="chat-input" id="chat-input" placeholder="Ask about routes, algorithms, IoT events..." rows="2"></textarea>
+      <button class="chat-send" id="chat-send">▶</button>
+    </div>
+    <div class="chat-ctx-bar">
+      <span class="ctx-label">CONTEXT:</span>
+      <span class="ctx-value" id="chat-ctx-display">none</span>
+    </div>
+  </div>
+
+  <!-- THREE.JS CDN -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.168.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script type="module" src="js/map3d.js"></script>
+  <script type="module" src="js/panels.js"></script>
+  <script type="module" src="js/chat.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

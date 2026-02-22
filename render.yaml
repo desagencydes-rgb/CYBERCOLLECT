@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: cybercollect
+    env: python
+    plan: free
+    buildCommand: "pip install fastapi uvicorn[standard] httpx python-multipart"
+    startCommand: "cd projet_collecte_dechets && uvicorn webapp.backend.main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
