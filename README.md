@@ -1,3 +1,12 @@
+---
+title: CyberCollect
+emoji: 🛰️
+colorFrom: green
+colorTo: blue
+sdk: docker
+pinned: false
+---
+
 <h1 align="center">
   <br>
   <img src="https://img.icons8.com/nolan/256/satellite.png" alt="CyberCollect" width="120">
